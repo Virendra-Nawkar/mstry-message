@@ -2,6 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import { ifError } from "assert";
 
 export async function POST(request: Request) {
     await dbConnect()
@@ -21,10 +22,21 @@ export async function POST(request: Request) {
         }
 
         const existingUserByEmail = await UserModel.findOne({ email });
-        const verifyCode = Math.floor(100000 + Math.random() * 900000).toString(); 
+        const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
         if (existingUserByEmail) {
-            true  //TODO: back here
+            if (existingUserByEmail.isVerified) {
+                return Response.json({
+                    success: false,
+                    message: "User already Exist with this Email"
+                }, { status: 400 })
+            } else {
+                const hasedPassword = await bcrypt.hash(password, 10)
+                existingUserByEmail.password = hasedPassword;
+                existingUserByEmail.verifyCode = verifyCode;
+                existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000)
+                await existingUserByEmail.save();
+            }
         } else {
             const hasedPassword = await bcrypt.hash(password, 10)
             const expiryDate = new Date()
@@ -33,16 +45,35 @@ export async function POST(request: Request) {
             const newUser = new UserModel({
                 username,
                 email,
-                password : hasedPassword,
+                password: hasedPassword,
                 verifyCode,
-                verifyCodeExpiry : expiryDate,
-                isVerified : false,
+                verifyCodeExpiry: expiryDate,
+                isVerified: false,
                 isAcceptingMessage: true,
                 messages: []
             })
 
             await newUser.save();
         }
+
+        // send verification email
+        const emailResponse = await sendVerificationEmail(
+            email,
+            username,
+            verifyCode
+        )
+
+        if (!emailResponse.succuess) {
+            return Response.json({
+                success: false,
+                message: emailResponse.message
+            }, { status: 500 })
+        }
+
+        return Response.json({
+            success: true,
+            message: "User Registered Successfully. Please Verify your Email"
+        }, { status: 201 })
 
     } catch (error) {
         console.error("Error Refisterting User", error)
