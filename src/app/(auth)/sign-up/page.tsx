@@ -34,26 +34,6 @@ const page = () => {
         }
     })
 
-    // useEffect(() => {
-    //     const checkUsernameUnique = async () => {
-    //         if (username) {
-    //             setIsCheckingUsername(true);
-    //             setUsernameMessage('')
-    //             try {
-    //                 const response = await axios.get(`/api/check-username-unique?username=${username}`)
-    //                 setUsernameMessage(response.data.message);
-    //             } catch (error) {
-    //                 const axiosError = error as AxiosError<ApiResponse>
-    //                 setUsernameMessage(axiosError.response?.data.message ?? "Error checking in username")
-    //             }
-    //             finally {
-    //                 setIsCheckingUsername(false);
-    //             }
-    //         }
-    //     }
-    //     checkUsernameUnique();
-    // }), [username]
-
     // chatgpt
     useEffect(() => {
         const checkUsernameUnique = async () => {
@@ -73,7 +53,7 @@ const page = () => {
         }
 
         checkUsernameUnique();
-    }, [username]) // ✅ Now it's correct
+    }, [username])
 
 
     const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
