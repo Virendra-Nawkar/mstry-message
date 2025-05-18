@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@ai-sdk/openai": "^1.3.22",
     "@ai-sdk/react": "^1.2.12",
     "@hookform/resolvers": "^5.0.1",
@@ -41,18 +42,32 @@
     "tailwind-merge": "^3.3.0",
     "usehooks-ts": "^3.1.1",
     "zod": "^3.24.4"
+=======
+    "mongoose": "^8.14.3",
+    "next": "15.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+>>>>>>> f9e8504 (Initial Setup)
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+<<<<<<< HEAD
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19.1.4",
+=======
+    "@types/node": "^20",
+    "@types/react": "^19",
+>>>>>>> f9e8504 (Initial Setup)
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
+<<<<<<< HEAD
     "tw-animate-css": "^1.2.9",
+=======
+>>>>>>> f9e8504 (Initial Setup)
     "typescript": "^5"
   }
 }
